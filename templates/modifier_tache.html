@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block titre %}Modifier la tâche{% endblock %}
+
+{% block contenu %}
+<div class="conteneur conteneur-auth">
+    <div class="carte-auth">
+        <h1>Modifier la tâche</h1>
+
+        <form method="POST" action="{{ url_for('taches.modifier', tache_id=tache.id) }}" id="formulaire-modifier-tache">
+            <div class="champ">
+                <label for="titre">Titre de l'action</label>
+                <input type="text" id="titre" name="titre" value="{{ tache.titre }}"
+                       required maxlength="200">
+            </div>
+
+            <div class="champ">
+                <label for="description">Description (optionnel)</label>
+                <input type="text" id="description" name="description"
+                       value="{{ tache.description }}" maxlength="500">
+            </div>
+
+            <div class="champ">
+                <label for="categorie">Catégorie</label>
+                <select id="categorie" name="categorie">
+                    {% for cat, impact in categories.items() %}
+                        <option value="{{ cat }}" {% if tache.categorie == cat %}selected{% endif %}>
+                            {{ cat }} — {{ impact }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="boutons-formulaire">
+                <button type="submit" class="btn-principal btn-plein">Enregistrer</button>
+                <a href="{{ url_for('taches.tableau_de_bord') }}" class="btn-secondaire">Annuler</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

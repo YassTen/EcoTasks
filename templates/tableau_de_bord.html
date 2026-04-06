@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block titre %}Tableau de bord{% endblock %}
+
+{% block contenu %}
+<div class="conteneur">
+    <div class="en-tete-dashboard">
+        <h1>Mes actions écologiques</h1>
+        <div class="stats-resumé">
+            <span class="stat">
+                <strong>{{ stats.accomplies }}</strong> / {{ stats.total }} accomplies
+            </span>
+            {% if stats.total > 0 %}
+                <span class="stat">
+                    {{ ((stats.accomplies / stats.total) * 100) | round | int }}% de progression
+                </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Formulaire d'ajout -->
+    <details class="carte formulaire-ajout" id="formulaire-ajout">
+        <summary class="btn-ajouter">+ Nouvelle action écologique</summary>
+        <form method="POST" action="{{ url_for('taches.ajouter_tache') }}" class="formulaire-tache">
+            <div class="champ">
+                <label for="titre">Titre de l'action</label>
+                <input type="text" id="titre" name="titre" required maxlength="200"
+                       placeholder="Ex : Prendre le vélo pour aller au travail">
+            </div>
+            <div class="champ">
+                <label for="description">Description (optionnel)</label>
+                <input type="text" id="description" name="description" maxlength="500"
+                       placeholder="Détails supplémentaires…">
+            </div>
+            <div class="champ">
+                <label for="categorie">Catégorie</label>
+                <select id="categorie" name="categorie">
+                    {% for cat, impact in categories.items() %}
+                        <option value="{{ cat }}">{{ cat }} — {{ impact }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn-principal">Ajouter</button>
+        </form>
+    </details>
+
+    <!-- Filtres -->
+    <div class="filtres">
+        <a href="{{ url_for('taches.tableau_de_bord') }}"
+           class="filtre {% if not filtre_actif %}actif{% endif %}">Toutes</a>
+        <a href="{{ url_for('taches.tableau_de_bord', filtre='a_faire') }}"
+           class="filtre {% if filtre_actif == 'a_faire' %}actif{% endif %}">À faire</a>
+        <a href="{{ url_for('taches.tableau_de_bord', filtre='accomplies') }}"
+           class="filtre {% if filtre_actif == 'accomplies' %}actif{% endif %}">Accomplies</a>
+    </div>
+
+    <!-- Liste des tâches -->
+    <div class="liste-taches">
+        {% if taches %}
+            {% for tache in taches %}
+                <div class="carte-tache {% if tache.est_accomplie %}accomplie{% endif %}">
+                    <div class="tache-contenu">
+                        <form method="POST" action="{{ url_for('taches.basculer', tache_id=tache.id) }}" class="formulaire-basculer">
+                            <button type="submit" class="btn-cocher" title="{% if tache.est_accomplie %}Marquer comme à faire{% else %}Marquer comme accomplie{% endif %}">
+                                {% if tache.est_accomplie %}☑{% else %}☐{% endif %}
+                            </button>
+                        </form>
+                        <div class="tache-info">
+                            <span class="tache-titre">{{ tache.titre }}</span>
+                            {% if tache.description %}
+                                <span class="tache-description">{{ tache.description }}</span>
+                            {% endif %}
+                            <span class="tache-meta">
+                                🏷️ {{ tache.categorie }} · {{ tache.impact_co2 }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="tache-actions">
+                        <a href="{{ url_for('taches.modifier', tache_id=tache.id) }}" class="btn-petit" title="Modifier">✏️</a>
+                        <form method="POST" action="{{ url_for('taches.supprimer', tache_id=tache.id) }}" class="formulaire-supprimer" onsubmit="return confirmerSuppression()">
+                            <button type="submit" class="btn-petit btn-danger" title="Supprimer">🗑️</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="carte vide">
+                <p>Aucune tâche pour le moment.</p>
+                <p>Ajoutez votre première action écologique ci-dessus !</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

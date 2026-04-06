@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EcoTasks — Suivez vos actions écologiques au quotidien. Un site sobre et éco-conçu.">
+    <title>{% block titre %}EcoTasks{% endblock %} — Actions Écologiques</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="barre-nav">
+            <a href="{{ url_for('accueil') }}" class="logo">🌱 EcoTasks</a>
+            <div class="nav-liens">
+                {% if session.get('utilisateur_id') %}
+                    <a href="{{ url_for('taches.tableau_de_bord') }}">Mes tâches</a>
+                    <a href="{{ url_for('utilisateurs.profil') }}">Profil</a>
+                    {% if session.get('role') == 'admin' %}
+                        <a href="{{ url_for('admin.panel_admin') }}">Admin</a>
+                    {% endif %}
+                    <a href="{{ url_for('auth.deconnexion') }}" class="btn-deconnexion">Déconnexion</a>
+                {% else %}
+                    <a href="{{ url_for('auth.connexion') }}">Connexion</a>
+                    <a href="{{ url_for('auth.inscription') }}" class="btn-principal">Inscription</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="conteneur">
+                    {% for categorie, message in messages %}
+                        <div class="alerte alerte-{{ categorie }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block contenu %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="conteneur">
+            <p>🌍 EcoTasks — Site éco-conçu | Aucun tracker | Hébergement sobre</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

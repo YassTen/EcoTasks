@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block titre %}Erreur {{ code }}{% endblock %}
+
+{% block contenu %}
+<div class="conteneur conteneur-auth">
+    <div class="carte-auth" style="text-align: center;">
+        <h1>Erreur {{ code }}</h1>
+        <p>{{ message }}</p>
+        <a href="{{ url_for('accueil') }}" class="btn-principal">Retour à l'accueil</a>
+    </div>
+</div>
+{% endblock %}

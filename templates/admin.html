@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block titre %}Administration{% endblock %}
+
+{% block contenu %}
+<div class="conteneur">
+    <h1>Panel d'administration</h1>
+
+    <!-- Statistiques globales -->
+    <div class="grille-stats-admin">
+        <div class="carte stat-carte">
+            <span class="stat-nombre">{{ nb_utilisateurs }}</span>
+            <span class="stat-label">Utilisateurs inscrits</span>
+        </div>
+        <div class="carte stat-carte">
+            <span class="stat-nombre">{{ stats_taches.total }}</span>
+            <span class="stat-label">Tâches créées</span>
+        </div>
+        <div class="carte stat-carte">
+            <span class="stat-nombre">{{ stats_taches.accomplies }}</span>
+            <span class="stat-label">Tâches accomplies</span>
+        </div>
+    </div>
+
+    <!-- Liste des utilisateurs -->
+    <div class="carte">
+        <h2>Utilisateurs</h2>
+        <div class="tableau-responsive">
+            <table class="tableau">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Inscrit le</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in utilisateurs %}
+                        <tr>
+                            <td>{{ u.id }}</td>
+                            <td>{{ u.nom }}</td>
+                            <td>{{ u.email }}</td>
+                            <td>{{ u.role | capitalize }}</td>
+                            <td>{{ u.date_creation }}</td>
+                            <td>
+                                {% if u.id != session.get('utilisateur_id') %}
+                                    <div class="actions-admin">
+                                        {% if u.role == 'utilisateur' %}
+                                            <form method="POST" action="{{ url_for('admin.promouvoir_admin', user_id=u.id) }}">
+                                                <button type="submit" class="btn-petit" title="Promouvoir admin">⬆️ Admin</button>
+                                            </form>
+                                        {% else %}
+                                            <form method="POST" action="{{ url_for('admin.retrograder_user', user_id=u.id) }}">
+                                                <button type="submit" class="btn-petit" title="Rétrograder en utilisateur">⬇️ User</button>
+                                            </form>
+                                        {% endif %}
+                                        <form method="POST"
+                                              action="{{ url_for('admin.supprimer_user', user_id=u.id) }}"
+                                              onsubmit="return confirm('Supprimer cet utilisateur et toutes ses tâches ?')">
+                                            <button type="submit" class="btn-petit btn-danger">🗑️</button>
+                                        </form>
+                                    </div>
+                                {% else %}
+                                    <span class="badge">Vous</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

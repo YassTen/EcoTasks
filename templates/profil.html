@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block titre %}Mon profil{% endblock %}
+
+{% block contenu %}
+<div class="conteneur">
+    <div class="carte profil-carte">
+        <h1>Mon profil</h1>
+
+        <div class="profil-infos">
+            <div class="profil-champ">
+                <span class="profil-label">Nom</span>
+                <span class="profil-valeur">{{ utilisateur.nom }}</span>
+            </div>
+            <div class="profil-champ">
+                <span class="profil-label">Email</span>
+                <span class="profil-valeur">{{ utilisateur.email }}</span>
+            </div>
+            <div class="profil-champ">
+                <span class="profil-label">Rôle</span>
+                <span class="profil-valeur">{{ utilisateur.role | capitalize }}</span>
+            </div>
+            <div class="profil-champ">
+                <span class="profil-label">Membre depuis</span>
+                <span class="profil-valeur">{{ utilisateur.date_creation }}</span>
+            </div>
+            <div class="profil-champ">
+                <span class="profil-label">Tâches accomplies</span>
+                <span class="profil-valeur">{{ stats.accomplies }} / {{ stats.total }}</span>
+            </div>
+        </div>
+
+        <div class="profil-actions">
+            <a href="{{ url_for('utilisateurs.modifier_profil') }}" class="btn-principal">Modifier le profil</a>
+            <form method="POST" action="{{ url_for('utilisateurs.supprimer_compte') }}"
+                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')">
+                <button type="submit" class="btn-danger">Supprimer mon compte</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
