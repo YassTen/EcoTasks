@@ -1,6 +1,7 @@
 /*
- * EcoTasks — Feuille de style sobre et éco-conçue.
- * Polices système, pas de média lourd, couleurs nature.
+ * EcoTasks — Feuille de style sobre et eco-concue.
+ * Polices systeme, pas de media lourd, couleurs nature.
+ * Mode sombre inclus pour economie d'energie OLED.
  */
 
 /* === Variables === */
@@ -24,6 +25,24 @@
     --police: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
+/* === Mode sombre === */
+[data-theme="sombre"] {
+    --primaire: #52b788;
+    --primaire-claire: #74c69d;
+    --primaire-tres-claire: #1e3a2b;
+    --primaire-foncee: #95d5b2;
+    --fond: #121212;
+    --surface: #1e1e1e;
+    --texte: #e0e0e0;
+    --texte-secondaire: #a0a0a0;
+    --bordure: #333333;
+    --erreur: #ef6461;
+    --erreur-fond: #2d1a1a;
+    --succes: #52b788;
+    --succes-fond: #1e3a2b;
+    --ombre: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
 /* === Reset sobre === */
 *,
 *::before,
@@ -36,7 +55,6 @@
 /* === Base === */
 html {
     font-size: 16px;
-    scroll-behavior: smooth;
 }
 
 body {
@@ -113,6 +131,7 @@ header {
     font-weight: 700;
     color: var(--primaire);
     text-decoration: none;
+    letter-spacing: -0.01em;
 }
 
 .logo:hover {
@@ -146,6 +165,37 @@ header {
 
 .nav-liens .btn-principal:hover {
     color: #fff;
+}
+
+/* === Bouton theme === */
+.btn-theme {
+    background: transparent;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    padding: 0.35rem 0.5rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s;
+}
+
+.btn-theme:hover {
+    border-color: var(--primaire);
+}
+
+.icone-theme {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--texte);
+    transition: background 0.15s;
+}
+
+[data-theme="sombre"] .icone-theme {
+    background: #f0c040;
+    box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px #f0c040;
 }
 
 /* === Boutons === */
@@ -223,20 +273,29 @@ header {
     background: transparent;
     border: 1px solid var(--bordure);
     border-radius: var(--rayon);
-    padding: 0.3rem 0.5rem;
+    padding: 0.3rem 0.6rem;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     text-decoration: none;
-    transition: border-color 0.15s;
+    color: var(--texte-secondaire);
+    transition: border-color 0.15s, color 0.15s;
 }
 
 .btn-petit:hover {
     border-color: var(--primaire);
+    color: var(--primaire);
     text-decoration: none;
 }
 
 .btn-petit.btn-danger {
-    padding: 0.3rem 0.5rem;
+    padding: 0.3rem 0.6rem;
+    color: var(--erreur);
+    border-color: var(--erreur);
+}
+
+.btn-petit.btn-danger:hover {
+    background: var(--erreur);
+    color: #fff;
 }
 
 /* === Alertes === */
@@ -250,13 +309,13 @@ header {
 .alerte-erreur {
     background: var(--erreur-fond);
     color: var(--erreur);
-    border: 1px solid #f5c6cb;
+    border: 1px solid var(--erreur);
 }
 
 .alerte-succes {
     background: var(--succes-fond);
     color: var(--succes);
-    border: 1px solid #b7e4c7;
+    border: 1px solid var(--succes);
 }
 
 /* === Cartes === */
@@ -309,13 +368,6 @@ header {
     padding: 1.25rem;
     border: 1px solid var(--bordure);
     border-radius: var(--rayon);
-    text-align: center;
-}
-
-.icone-engagement {
-    font-size: 1.75rem;
-    display: block;
-    margin-bottom: 0.5rem;
 }
 
 .carte-engagement h3 {
@@ -328,7 +380,7 @@ header {
     color: var(--texte-secondaire);
 }
 
-/* === Comment ça marche === */
+/* === Comment ca marche === */
 .etapes {
     list-style: none;
     counter-reset: etape;
@@ -347,7 +399,7 @@ header {
 }
 
 .etapes li::before {
-    content: "Étape " counter(etape);
+    content: "Etape " counter(etape);
     font-size: 0.75rem;
     font-weight: 700;
     color: var(--primaire);
@@ -430,7 +482,8 @@ header {
 }
 
 .champ input::placeholder {
-    color: #aaa;
+    color: var(--texte-secondaire);
+    opacity: 0.6;
 }
 
 .lien-auth {
@@ -477,7 +530,7 @@ header {
     margin-bottom: 1rem;
 }
 
-.stats-resumé {
+.stats-resume {
     display: flex;
     gap: 1rem;
 }
@@ -544,7 +597,7 @@ header {
     font-size: 0.85rem;
     color: var(--texte-secondaire);
     border: 1px solid var(--bordure);
-    transition: all 0.15s;
+    transition: border-color 0.15s, color 0.15s;
 }
 
 .filtre:hover {
@@ -563,7 +616,7 @@ header {
     color: #fff;
 }
 
-/* Tâches */
+/* Taches */
 .carte-tache {
     display: flex;
     justify-content: space-between;
@@ -597,14 +650,47 @@ header {
     min-width: 0;
 }
 
+/* Checkbox CSS (remplace les emojis) */
 .btn-cocher {
-    font-size: 1.3rem;
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
     line-height: 1;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--bordure);
+    border-radius: 4px;
+    transition: all 0.15s;
+    position: relative;
+}
+
+.checkbox:hover {
+    border-color: var(--primaire);
+}
+
+.checkbox.cochee {
+    background: var(--primaire);
+    border-color: var(--primaire);
+}
+
+.checkbox.cochee::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 6px;
+    height: 11px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
 }
 
 .tache-info {
@@ -650,6 +736,40 @@ header {
 .vide p:first-child {
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
+}
+
+/* === Pagination === */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--bordure);
+}
+
+.page-lien {
+    display: inline-block;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    font-size: 0.85rem;
+    color: var(--texte-secondaire);
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.page-lien:hover {
+    border-color: var(--primaire);
+    color: var(--primaire);
+    text-decoration: none;
+}
+
+.page-lien.actif {
+    background: var(--primaire);
+    color: #fff;
+    border-color: var(--primaire);
 }
 
 /* === Profil === */
@@ -817,5 +937,26 @@ footer {
 
     .boutons-formulaire {
         flex-direction: column;
+    }
+
+    /* Ameliorations tactiles pour Android / Mobiles */
+    .btn-principal, .btn-secondaire, .btn-danger, .page-lien, .btn-petit {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        font-size: 1rem; /* Plus lisible sur smartphone */
+    }
+
+    .champ input, .champ select, .champ textarea {
+        padding: 0.8rem;
+        font-size: 1rem; /* Empeche le zoom auto sur iOS/Android */
+    }
+
+    input[type="checkbox"], .btn-cocher {
+        transform: scale(1.2); /* Checkbox plus faciles a tapoter */
+        margin-right: 0.2rem;
+    }
+
+    .carte {
+        padding: 1rem;
     }
 }

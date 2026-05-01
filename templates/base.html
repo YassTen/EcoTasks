@@ -3,26 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="EcoTasks — Suivez vos actions écologiques au quotidien. Un site sobre et éco-conçu.">
-    <title>{% block titre %}EcoTasks{% endblock %} — Actions Écologiques</title>
+    <meta name="description" content="EcoTasks — Suivez vos actions ecologiques au quotidien. Un site sobre et eco-concu.">
+    <title>{% block titre %}EcoTasks{% endblock %} — Actions Ecologiques</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header>
         <nav class="barre-nav">
-            <a href="{{ url_for('accueil') }}" class="logo">🌱 EcoTasks</a>
+            <a href="{{ url_for('accueil') }}" class="logo">EcoTasks</a>
             <div class="nav-liens">
                 {% if session.get('utilisateur_id') %}
-                    <a href="{{ url_for('taches.tableau_de_bord') }}">Mes tâches</a>
+                    <a href="{{ url_for('taches.tableau_de_bord') }}">Mes taches</a>
                     <a href="{{ url_for('utilisateurs.profil') }}">Profil</a>
                     {% if session.get('role') == 'admin' %}
                         <a href="{{ url_for('admin.panel_admin') }}">Admin</a>
                     {% endif %}
-                    <a href="{{ url_for('auth.deconnexion') }}" class="btn-deconnexion">Déconnexion</a>
+                    <a href="{{ url_for('auth.deconnexion') }}" class="btn-deconnexion">Deconnexion</a>
                 {% else %}
                     <a href="{{ url_for('auth.connexion') }}">Connexion</a>
                     <a href="{{ url_for('auth.inscription') }}" class="btn-principal">Inscription</a>
                 {% endif %}
+                <button type="button" id="btn-theme" class="btn-theme" title="Changer de theme" aria-label="Basculer le mode sombre">
+                    <span class="icone-theme"></span>
+                </button>
             </div>
         </nav>
     </header>
@@ -45,10 +48,10 @@
 
     <footer>
         <div class="conteneur">
-            <p>🌍 EcoTasks — Site éco-conçu | Aucun tracker | Hébergement sobre</p>
+            <p>EcoTasks — Site eco-concu | Aucun tracker | Hebergement sobre</p>
         </div>
     </footer>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
 </body>
 </html>

@@ -5,8 +5,8 @@
 {% block contenu %}
 <div class="conteneur">
     <div class="en-tete-dashboard">
-        <h1>Mes actions écologiques</h1>
-        <div class="stats-resumé">
+        <h1>Mes actions ecologiques</h1>
+        <div class="stats-resume">
             <span class="stat">
                 <strong>{{ stats.accomplies }}</strong> / {{ stats.total }} accomplies
             </span>
@@ -20,20 +20,20 @@
 
     <!-- Formulaire d'ajout -->
     <details class="carte formulaire-ajout" id="formulaire-ajout">
-        <summary class="btn-ajouter">+ Nouvelle action écologique</summary>
+        <summary class="btn-ajouter">+ Nouvelle action ecologique</summary>
         <form method="POST" action="{{ url_for('taches.ajouter_tache') }}" class="formulaire-tache">
             <div class="champ">
                 <label for="titre">Titre de l'action</label>
                 <input type="text" id="titre" name="titre" required maxlength="200"
-                       placeholder="Ex : Prendre le vélo pour aller au travail">
+                       placeholder="Ex : Prendre le velo pour aller au travail">
             </div>
             <div class="champ">
                 <label for="description">Description (optionnel)</label>
                 <input type="text" id="description" name="description" maxlength="500"
-                       placeholder="Détails supplémentaires…">
+                       placeholder="Details supplementaires...">
             </div>
             <div class="champ">
-                <label for="categorie">Catégorie</label>
+                <label for="categorie">Categorie</label>
                 <select id="categorie" name="categorie">
                     {% for cat, impact in categories.items() %}
                         <option value="{{ cat }}">{{ cat }} — {{ impact }}</option>
@@ -49,20 +49,20 @@
         <a href="{{ url_for('taches.tableau_de_bord') }}"
            class="filtre {% if not filtre_actif %}actif{% endif %}">Toutes</a>
         <a href="{{ url_for('taches.tableau_de_bord', filtre='a_faire') }}"
-           class="filtre {% if filtre_actif == 'a_faire' %}actif{% endif %}">À faire</a>
+           class="filtre {% if filtre_actif == 'a_faire' %}actif{% endif %}">A faire</a>
         <a href="{{ url_for('taches.tableau_de_bord', filtre='accomplies') }}"
            class="filtre {% if filtre_actif == 'accomplies' %}actif{% endif %}">Accomplies</a>
     </div>
 
-    <!-- Liste des tâches -->
+    <!-- Liste des taches -->
     <div class="liste-taches">
         {% if taches %}
             {% for tache in taches %}
                 <div class="carte-tache {% if tache.est_accomplie %}accomplie{% endif %}">
                     <div class="tache-contenu">
                         <form method="POST" action="{{ url_for('taches.basculer', tache_id=tache.id) }}" class="formulaire-basculer">
-                            <button type="submit" class="btn-cocher" title="{% if tache.est_accomplie %}Marquer comme à faire{% else %}Marquer comme accomplie{% endif %}">
-                                {% if tache.est_accomplie %}☑{% else %}☐{% endif %}
+                            <button type="submit" class="btn-cocher" title="{% if tache.est_accomplie %}Marquer comme a faire{% else %}Marquer comme accomplie{% endif %}">
+                                <span class="checkbox {% if tache.est_accomplie %}cochee{% endif %}"></span>
                             </button>
                         </form>
                         <div class="tache-info">
@@ -71,24 +71,45 @@
                                 <span class="tache-description">{{ tache.description }}</span>
                             {% endif %}
                             <span class="tache-meta">
-                                🏷️ {{ tache.categorie }} · {{ tache.impact_co2 }}
+                                {{ tache.categorie }} · {{ tache.impact_co2 }}
                             </span>
                         </div>
                     </div>
                     <div class="tache-actions">
-                        <a href="{{ url_for('taches.modifier', tache_id=tache.id) }}" class="btn-petit" title="Modifier">✏️</a>
+                        <a href="{{ url_for('taches.modifier', tache_id=tache.id) }}" class="btn-petit" title="Modifier">Modifier</a>
                         <form method="POST" action="{{ url_for('taches.supprimer', tache_id=tache.id) }}" class="formulaire-supprimer" onsubmit="return confirmerSuppression()">
-                            <button type="submit" class="btn-petit btn-danger" title="Supprimer">🗑️</button>
+                            <button type="submit" class="btn-petit btn-danger" title="Supprimer">Supprimer</button>
                         </form>
                     </div>
                 </div>
             {% endfor %}
         {% else %}
             <div class="carte vide">
-                <p>Aucune tâche pour le moment.</p>
-                <p>Ajoutez votre première action écologique ci-dessus !</p>
+                <p>Aucune tache pour le moment.</p>
+                <p>Ajoutez votre premiere action ecologique ci-dessus.</p>
             </div>
         {% endif %}
     </div>
+
+    <!-- Pagination -->
+    {% if nb_pages > 1 %}
+        <nav class="pagination" aria-label="Navigation des pages">
+            {% if page > 1 %}
+                <a href="{{ url_for('taches.tableau_de_bord', filtre=filtre_actif, page=page-1) }}" class="page-lien">Precedent</a>
+            {% endif %}
+
+            {% for p in range(1, nb_pages + 1) %}
+                {% if p == page %}
+                    <span class="page-lien actif">{{ p }}</span>
+                {% else %}
+                    <a href="{{ url_for('taches.tableau_de_bord', filtre=filtre_actif, page=p) }}" class="page-lien">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page < nb_pages %}
+                <a href="{{ url_for('taches.tableau_de_bord', filtre=filtre_actif, page=page+1) }}" class="page-lien">Suivant</a>
+            {% endif %}
+        </nav>
+    {% endif %}
 </div>
 {% endblock %}

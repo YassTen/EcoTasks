@@ -5,15 +5,15 @@
 {% block contenu %}
 <section class="hero">
     <div class="conteneur">
-        <h1>Suivez vos actions écologiques au quotidien</h1>
+        <h1>Suivez vos actions ecologiques au quotidien</h1>
         <p class="hero-sous-titre">
-            Créez, suivez et accomplissez des gestes simples pour la planète.
-            Un outil sobre, sans superflu, conçu pour agir.
+            Creez, suivez et accomplissez des gestes simples pour la planete.
+            Un outil sobre, sans superflu, concu pour agir.
         </p>
         {% if not session.get('utilisateur_id') %}
-            <a href="{{ url_for('auth.inscription') }}" class="btn-principal btn-grand">Créer un compte gratuitement</a>
+            <a href="{{ url_for('auth.inscription') }}" class="btn-principal btn-grand">Creer un compte gratuitement</a>
         {% else %}
-            <a href="{{ url_for('taches.tableau_de_bord') }}" class="btn-principal btn-grand">Accéder à mes tâches</a>
+            <a href="{{ url_for('taches.tableau_de_bord') }}" class="btn-principal btn-grand">Acceder a mes taches</a>
         {% endif %}
     </div>
 </section>
@@ -23,24 +23,20 @@
         <h2>Nos engagements Green IT</h2>
         <div class="grille-engagements">
             <div class="carte-engagement">
-                <span class="icone-engagement">⚡</span>
-                <h3>Site ultra léger</h3>
-                <p>Moins de 50 Ko par page chargée. Aucun framework JavaScript lourd, aucune image superflue.</p>
+                <h3>Site ultra leger</h3>
+                <p>Moins de 50 Ko par page chargee. Aucun framework JavaScript lourd, aucune image superflue.</p>
             </div>
             <div class="carte-engagement">
-                <span class="icone-engagement">🔒</span>
                 <h3>Aucun tracker</h3>
-                <p>Zéro cookie tiers, zéro analytics externe, zéro publicité. Votre vie privée est respectée.</p>
+                <p>Zero cookie tiers, zero analytics externe, zero publicite. Votre vie privee est respectee.</p>
             </div>
             <div class="carte-engagement">
-                <span class="icone-engagement">🌿</span>
                 <h3>Code minimal</h3>
-                <p>HTML sémantique, CSS sobre, JavaScript uniquement si nécessaire. Chaque octet est justifié.</p>
+                <p>HTML semantique, CSS sobre, JavaScript uniquement si necessaire. Chaque octet est justifie.</p>
             </div>
             <div class="carte-engagement">
-                <span class="icone-engagement">💾</span>
-                <h3>Données sobres</h3>
-                <p>Seules les données essentielles sont stockées. Pas de collecte inutile, pas de redondance.</p>
+                <h3>Donnees sobres</h3>
+                <p>Seules les donnees essentielles sont stockees. Pas de collecte inutile, pas de redondance.</p>
             </div>
         </div>
     </div>
@@ -48,15 +44,15 @@
 
 <section class="comment-ca-marche">
     <div class="conteneur">
-        <h2>Comment ça marche ?</h2>
+        <h2>Comment ca marche</h2>
         <ol class="etapes">
             <li>
-                <strong>Créez un compte</strong>
+                <strong>Creez un compte</strong>
                 <span>Inscription rapide avec un email et un mot de passe.</span>
             </li>
             <li>
                 <strong>Ajoutez vos actions</strong>
-                <span>Définissez des gestes écologiques : vélo, compost, réduction du plastique…</span>
+                <span>Definissez des gestes ecologiques : velo, compost, reduction du plastique...</span>
             </li>
             <li>
                 <strong>Cochez et progressez</strong>

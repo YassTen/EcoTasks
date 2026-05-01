@@ -14,11 +14,11 @@
         </div>
         <div class="carte stat-carte">
             <span class="stat-nombre">{{ stats_taches.total }}</span>
-            <span class="stat-label">Tâches créées</span>
+            <span class="stat-label">Taches creees</span>
         </div>
         <div class="carte stat-carte">
             <span class="stat-nombre">{{ stats_taches.accomplies }}</span>
-            <span class="stat-label">Tâches accomplies</span>
+            <span class="stat-label">Taches accomplies</span>
         </div>
     </div>
 
@@ -32,7 +32,7 @@
                         <th>ID</th>
                         <th>Nom</th>
                         <th>Email</th>
-                        <th>Rôle</th>
+                        <th>Role</th>
                         <th>Inscrit le</th>
                         <th>Actions</th>
                     </tr>
@@ -50,17 +50,17 @@
                                     <div class="actions-admin">
                                         {% if u.role == 'utilisateur' %}
                                             <form method="POST" action="{{ url_for('admin.promouvoir_admin', user_id=u.id) }}">
-                                                <button type="submit" class="btn-petit" title="Promouvoir admin">⬆️ Admin</button>
+                                                <button type="submit" class="btn-petit" title="Promouvoir admin">Promouvoir</button>
                                             </form>
                                         {% else %}
                                             <form method="POST" action="{{ url_for('admin.retrograder_user', user_id=u.id) }}">
-                                                <button type="submit" class="btn-petit" title="Rétrograder en utilisateur">⬇️ User</button>
+                                                <button type="submit" class="btn-petit" title="Retrograder en utilisateur">Retrograder</button>
                                             </form>
                                         {% endif %}
                                         <form method="POST"
                                               action="{{ url_for('admin.supprimer_user', user_id=u.id) }}"
-                                              onsubmit="return confirm('Supprimer cet utilisateur et toutes ses tâches ?')">
-                                            <button type="submit" class="btn-petit btn-danger">🗑️</button>
+                                              onsubmit="return confirm('Supprimer cet utilisateur et toutes ses taches ?')">
+                                            <button type="submit" class="btn-petit btn-danger">Supprimer</button>
                                         </form>
                                     </div>
                                 {% else %}
@@ -72,6 +72,27 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        {% if nb_pages > 1 %}
+            <nav class="pagination" aria-label="Navigation des pages">
+                {% if page > 1 %}
+                    <a href="{{ url_for('admin.panel_admin', page=page-1) }}" class="page-lien">Precedent</a>
+                {% endif %}
+
+                {% for p in range(1, nb_pages + 1) %}
+                    {% if p == page %}
+                        <span class="page-lien actif">{{ p }}</span>
+                    {% else %}
+                        <a href="{{ url_for('admin.panel_admin', page=p) }}" class="page-lien">{{ p }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page < nb_pages %}
+                    <a href="{{ url_for('admin.panel_admin', page=page+1) }}" class="page-lien">Suivant</a>
+                {% endif %}
+            </nav>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

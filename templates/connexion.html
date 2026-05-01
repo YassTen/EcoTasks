@@ -6,7 +6,7 @@
 <div class="conteneur conteneur-auth">
     <div class="carte-auth">
         <h1>Connexion</h1>
-        <p class="sous-titre-auth">Accédez à vos actions écologiques.</p>
+        <p class="sous-titre-auth">Accedez a vos actions ecologiques.</p>
 
         <form method="POST" action="{{ url_for('auth.connexion') }}" id="formulaire-connexion">
             <div class="champ">
@@ -18,7 +18,7 @@
             <div class="champ">
                 <label for="mot_de_passe">Mot de passe</label>
                 <input type="password" id="mot_de_passe" name="mot_de_passe"
-                       required autocomplete="current-password" placeholder="••••••">
+                       required autocomplete="current-password">
             </div>
 
             <button type="submit" class="btn-principal btn-plein">Se connecter</button>
@@ -26,7 +26,7 @@
 
         <p class="lien-auth">
             Pas encore de compte ?
-            <a href="{{ url_for('auth.inscription') }}">Créer un compte</a>
+            <a href="{{ url_for('auth.inscription') }}">Creer un compte</a>
         </p>
     </div>
 </div>

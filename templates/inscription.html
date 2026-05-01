@@ -5,8 +5,8 @@
 {% block contenu %}
 <div class="conteneur conteneur-auth">
     <div class="carte-auth">
-        <h1>Créer un compte</h1>
-        <p class="sous-titre-auth">Rejoignez EcoTasks et commencez à agir pour la planète.</p>
+        <h1>Creer un compte</h1>
+        <p class="sous-titre-auth">Rejoignez EcoTasks et commencez a agir pour la planete.</p>
 
         <form method="POST" action="{{ url_for('auth.inscription') }}" id="formulaire-inscription">
             <div class="champ">
@@ -25,21 +25,21 @@
                 <label for="mot_de_passe">Mot de passe</label>
                 <input type="password" id="mot_de_passe" name="mot_de_passe"
                        required minlength="6" autocomplete="new-password"
-                       placeholder="6 caractères minimum">
+                       placeholder="6 caracteres minimum">
             </div>
 
             <div class="champ">
                 <label for="confirmation">Confirmer le mot de passe</label>
                 <input type="password" id="confirmation" name="confirmation"
                        required minlength="6" autocomplete="new-password"
-                       placeholder="Répétez le mot de passe">
+                       placeholder="Repetez le mot de passe">
             </div>
 
-            <button type="submit" class="btn-principal btn-plein">Créer mon compte</button>
+            <button type="submit" class="btn-principal btn-plein">Creer mon compte</button>
         </form>
 
         <p class="lien-auth">
-            Déjà inscrit ?
+            Deja inscrit ?
             <a href="{{ url_for('auth.connexion') }}">Se connecter</a>
         </p>
     </div>

@@ -17,7 +17,7 @@
                 <span class="profil-valeur">{{ utilisateur.email }}</span>
             </div>
             <div class="profil-champ">
-                <span class="profil-label">Rôle</span>
+                <span class="profil-label">Role</span>
                 <span class="profil-valeur">{{ utilisateur.role | capitalize }}</span>
             </div>
             <div class="profil-champ">
@@ -25,7 +25,7 @@
                 <span class="profil-valeur">{{ utilisateur.date_creation }}</span>
             </div>
             <div class="profil-champ">
-                <span class="profil-label">Tâches accomplies</span>
+                <span class="profil-label">Taches accomplies</span>
                 <span class="profil-valeur">{{ stats.accomplies }} / {{ stats.total }}</span>
             </div>
         </div>
@@ -33,7 +33,7 @@
         <div class="profil-actions">
             <a href="{{ url_for('utilisateurs.modifier_profil') }}" class="btn-principal">Modifier le profil</a>
             <form method="POST" action="{{ url_for('utilisateurs.supprimer_compte') }}"
-                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')">
+                  onsubmit="return confirm('Etes-vous sur de vouloir supprimer votre compte ? Cette action est irreversible.')">
                 <button type="submit" class="btn-danger">Supprimer mon compte</button>
             </form>
         </div>

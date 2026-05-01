@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block titre %}Modifier la tâche{% endblock %}
+{% block titre %}Modifier la tache{% endblock %}
 
 {% block contenu %}
 <div class="conteneur conteneur-auth">
     <div class="carte-auth">
-        <h1>Modifier la tâche</h1>
+        <h1>Modifier la tache</h1>
 
         <form method="POST" action="{{ url_for('taches.modifier', tache_id=tache.id) }}" id="formulaire-modifier-tache">
             <div class="champ">
@@ -21,7 +21,7 @@
             </div>
 
             <div class="champ">
-                <label for="categorie">Catégorie</label>
+                <label for="categorie">Categorie</label>
                 <select id="categorie" name="categorie">
                     {% for cat, impact in categories.items() %}
                         <option value="{{ cat }}" {% if tache.categorie == cat %}selected{% endif %}>

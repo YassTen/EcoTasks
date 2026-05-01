@@ -19,7 +19,7 @@ def get_db():
 
 
 def init_db():
-    """Crée les tables au premier lancement. Si elles existent déjà, ne fait rien."""
+    """Crée les tables et index au premier lancement. Si elles existent déjà, ne fait rien."""
     conn = get_db()
     c = conn.cursor()
 
@@ -47,7 +47,10 @@ def init_db():
             FOREIGN KEY (utilisateur_id) REFERENCES utilisateurs(id) ON DELETE CASCADE
         )
     ''')
-    # TODO: ajouter un index sur utilisateur_id si la base grossit
+
+    # Index sur les colonnes fréquemment interrogées (Green IT : requêtes plus rapides = moins de CPU)
+    c.execute('CREATE INDEX IF NOT EXISTS idx_taches_utilisateur ON taches(utilisateur_id)')
+    c.execute('CREATE INDEX IF NOT EXISTS idx_utilisateurs_email ON utilisateurs(email)')
 
     conn.commit()
     conn.close()

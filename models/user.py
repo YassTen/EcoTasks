@@ -31,7 +31,7 @@ def verifier_identifiants(email, mot_de_passe):
     """Vérifie email + mdp, retourne l'utilisateur si c'est bon, None sinon."""
     conn = get_db()
     user = conn.execute(
-        'SELECT * FROM utilisateurs WHERE email = ?', (email,)
+        'SELECT id, nom, email, mot_de_passe, role FROM utilisateurs WHERE email = ?', (email,)
     ).fetchone()
     conn.close()
 
@@ -48,14 +48,20 @@ def verifier_identifiants(email, mot_de_passe):
 
 def get_user(user_id):
     conn = get_db()
-    user = conn.execute('SELECT * FROM utilisateurs WHERE id = ?', (user_id,)).fetchone()
+    user = conn.execute(
+        'SELECT id, nom, email, role, date_creation FROM utilisateurs WHERE id = ?',
+        (user_id,)
+    ).fetchone()
     conn.close()
     return user
 
 
 def get_user_par_email(email):
     conn = get_db()
-    user = conn.execute('SELECT * FROM utilisateurs WHERE email = ?', (email,)).fetchone()
+    user = conn.execute(
+        'SELECT id, nom, email, role FROM utilisateurs WHERE email = ?',
+        (email,)
+    ).fetchone()
     conn.close()
     return user
 
@@ -95,11 +101,13 @@ def supprimer_utilisateur(user_id):
     conn.close()
 
 
-def lister_utilisateurs():
-    """Pour le panel admin : liste tous les utilisateurs triés par date."""
+def lister_utilisateurs(page=1, par_page=20):
+    """Pour le panel admin : liste paginée des utilisateurs."""
+    offset = (page - 1) * par_page
     conn = get_db()
     users = conn.execute(
-        'SELECT id, nom, email, role, date_creation FROM utilisateurs ORDER BY date_creation DESC'
+        'SELECT id, nom, email, role, date_creation FROM utilisateurs ORDER BY date_creation DESC LIMIT ? OFFSET ?',
+        (par_page, offset)
     ).fetchall()
     conn.close()
     return users
