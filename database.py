@@ -1,7 +1,6 @@
 # database.py - Connexion et init SQLite
 # On part sur SQLite plutôt que MySQL/PostgreSQL parce que pour un projet
-# local avec quelques utilisateurs, ça suffit largement et ça évite
-# d'installer un serveur de BDD en plus (sobriété numérique)
+# local avec quelques utilisateurs, ça suffit largement et ça évite d'installer un serveur de BDD en plus (sobriété numérique)
 
 import sqlite3
 import os
