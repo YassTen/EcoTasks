@@ -4,7 +4,7 @@ Application web de gestion de taches eco-responsables, realisee dans le cadre du
 
 ## Site deploye
 
-**URL : [A COMPLETER APRES DEPLOIEMENT RENDER]**
+**URL : [https://ecotasks.onrender.com](https://ecotasks.onrender.com)**
 
 ## Concept
 
