@@ -960,3 +960,58 @@ footer {
         padding: 1rem;
     }
 }
+
+/* === Mode sombre (automatique selon les preferences systeme) ===
+   Reduit la consommation d'energie sur ecrans OLED.
+   Pas de bouton toggle = pas de JS supplementaire = sobriete. */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primaire: #52b788;
+        --primaire-claire: #74c69d;
+        --primaire-tres-claire: #1a2e25;
+        --primaire-foncee: #95d5b2;
+        --fond: #121212;
+        --surface: #1e1e1e;
+        --texte: #e0e0e0;
+        --texte-secondaire: #a0a0a0;
+        --bordure: #333333;
+        --erreur: #ef5350;
+        --erreur-fond: #2c1a1a;
+        --succes: #52b788;
+        --succes-fond: #1a2e25;
+        --ombre: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Le hero a un gradient en dur, il faut le redefinir */
+    .hero {
+        background: linear-gradient(180deg, var(--primaire-tres-claire) 0%, var(--fond) 100%);
+    }
+
+    /* Les inputs ont un fond explicite */
+    .champ input,
+    .champ select,
+    .champ textarea {
+        background: #2a2a2a;
+        color: var(--texte);
+        border-color: var(--bordure);
+    }
+
+    .champ input::placeholder {
+        color: #666;
+    }
+
+    /* Le tableau admin en dark */
+    .tableau th {
+        background: #1a1a1a;
+    }
+
+    /* Les boutons restent lisibles */
+    .nav-liens .btn-principal,
+    .btn-principal {
+        color: #fff;
+    }
+
+    .btn-deconnexion {
+        color: var(--erreur) !important;
+    }
+}

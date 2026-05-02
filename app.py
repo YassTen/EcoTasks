@@ -2,7 +2,7 @@
 # Flask + SQLite, pas besoin de plus pour un projet local
 
 import os
-from flask import Flask, render_template, abort
+from flask import Flask, render_template
 from database import init_db
 from routes.auth import auth_bp
 from routes.tasks import taches_bp
@@ -20,6 +20,11 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(taches_bp)
 app.register_blueprint(utilisateurs_bp)
 app.register_blueprint(admin_bp)
+
+# Init de la base au demarrage, que ce soit avec gunicorn ou en local
+# gunicorn importe app sans passer par if __name__ == '__main__',
+# donc init_db() doit etre ici pour que les tables existent en prod
+init_db()
 
 
 @app.route('/')
@@ -42,25 +47,25 @@ def page_500(e):
     return render_template('erreur.html', code=500, message='Erreur serveur'), 500
 
 
-import socket
-
-def get_local_ip():
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(('10.255.255.255', 1))
-        IP = s.getsockname()[0]
-    except Exception:
-        IP = '127.0.0.1'
-    finally:
-        s.close()
-    return IP
-
 if __name__ == '__main__':
+    # en local seulement : mode debug + affichage de l'IP reseau
+    import socket
+
+    def get_local_ip():
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(('10.255.255.255', 1))
+            IP = s.getsockname()[0]
+        except Exception:
+            IP = '127.0.0.1'
+        finally:
+            s.close()
+        return IP
+
     local_ip = get_local_ip()
-    print("\n" + "="*60)
-    print("🌍 L'application est accessible sur votre reseau local !")
-    print(f"👉 Lien a partager (Android, autres PC) : http://{local_ip}:5000")
-    print("="*60 + "\n")
-    
-    init_db()  # cree les tables au premier lancement
+    print("\n" + "=" * 60)
+    print("L'application est accessible sur votre reseau local !")
+    print(f"Lien a partager : http://{local_ip}:5000")
+    print("=" * 60 + "\n")
+
     app.run(debug=True, host='0.0.0.0', port=5000)

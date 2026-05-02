@@ -1,0 +1,933 @@
+Numérique Durable (TI616)
+MINI-PROJET HACKATHON : « LE SITE WEB LE PLUS GREEN »
+Partie 2 : Implémentation, Analyse et Évaluation
+Coordinateur du module :
+Yvan GUIFO
+Livrable : Partie 1 + Partie 2
+Le dimanche 3 mai au plus tard à 23h
+(délai de rigueur)
+Information
+Rappel de l’objectif : Cette seconde partie constitue le cœur opérationnel du mini-projet. Elle
+couvre l’implémentation complète du site web (front-end, back-end, base de données), l’analyse
+de son empreinte carbone, les tests de qualité et de performance, ainsi que la présentation
+finale. Elle s’appuie sur les livrables de conception produits lors de la Partie 1 et doit en assurer
+la cohérence.
+Rappel important :
+Semaine
+Intitulé
+Objectif de séance
+Semaine du 13 avril
+Suivi de projet
+Évaluer de votre évolution, justifier vos
+choix techniques, etc.
+Semaine du 4 mai
+Présentation finale
+Rappel contexte + démo en live + ré-
+ponses aux questions.
+Phase 4 — Implémentation — Front-end, Back-end et Base de données
+Étape 4.1 — Développement front-end
+Approche Recommandée
+Objectif : Développer la partie visible du site en intégrant dès le départ les principes d’éco-
+conception web : sobriété visuelle, poids minimal des ressources, chargement rapide, etc.
+Technologies recommandées : HTML5 / CSS3 natif en priorité. JavaScript minimal. Frame-
+work CSS léger si justifié (ex. : TailwindCSS en mode purge, Pico.css, Classless CSS). Aucune
+bibliothèque lourde sans justification explicite.
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Consignes
+Consignes de développement :
+a) Optimisation des ressources statiques :
+— Minifier les fichiers CSS et JavaScript (outils : cssnano, terser, ou pipeline Vite/Parcel
+minimal).
+— Compresser toutes les images avant intégration (https://squoosh.app, https://
+tinypng.com).
+— Préférer les formats modernes : WebP, AVIF plutôt que JPEG/PNG lourds.
+— Limiter le nombre total de fichiers chargés par page (objectif : moins de 15 requêtes
+HTTP par page).
+b) Chargement intelligent :
+— Implémenter le lazy loading sur les images et médias (loading="lazy").
+— Différer le chargement des scripts non critiques (defer / async).
+— Utiliser des polices système ou des polices auto-hébergées légères plutôt que Google
+Fonts (1 requête externe évitée par police).
+c) Sobriété visuelle :
+— Pas d’animations CSS/JS sans valeur fonctionnelle.
+— Mode sombre proposé si possible (réduit la consommation sur écrans OLED).
+— Interface paginée plutôt que scroll infini pour les listes.
+— Pas de vidéo en autoplay ni de lecture automatique de médias.
+d) Accessibilité de base :
+— Balises sémantiques (<main>, <nav>, <article>, <footer>).
+— Attributs alt sur toutes les images.
+— Contraste suffisant entre texte et fond (ratio 4,5 :1).
+Concepts Clés Green IT
+Indicateurs Green IT à surveiller pour le front-end :
+— Poids total d’une page : viser < 500 Ko (idéalement < 200 Ko).
+— Nombre de requêtes HTTP : viser < 15 par page.
+— Score Lighthouse Performance : viser > 80/100.
+— First Contentful Paint (FCP) : < 1,8 s.
+— Largest Contentful Paint (LCP) : < 2,5 s.
+Étape 4.2 — Développement back-end et accès à la base de données
+Approche Recommandée
+Objectif : Implémenter la logique serveur, sécurisée et sobre, avec une gestion rigoureuse des
+accès aux données.
+Technologies recommandées : Node.js (Express), Python (Flask ou Django minimal), PHP natif
+ou Laravel léger. Base de données : SQLite (pour un projet petit), PostgreSQL ou MySQL (pour
+un projet à déployer). ORM léger ou requêtes SQL directes.
+2
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Consignes
+Consignes de développement :
+a) Gestion des utilisateurs — CRUD complet obligatoire :
+— Création : formulaire d’inscription avec validation côté serveur (hash du mot de passe,
+vérification du format email).
+— Lecture : liste paginée des utilisateurs (max. 20 résultats par page).
+— Modification : formulaire de mise à jour des informations.
+— Suppression : confirmation explicite avant suppression (pas de suppression acciden-
+telle).
+b) Entité métier principale — CRUD complet :
+— Idem pour la seconde entité définie en Partie 1.
+— Les données affichées doivent être filtrées et paginées.
+— Les formulaires doivent inclure une validation serveur.
+c) Optimisation des accès à la base de données :
+— Ne récupérer que les colonnes nécessaires (SELECT champ1, champ2 plutôt que
+SELECT *).
+— Paginer tous les résultats (LIMIT / OFFSET).
+— Ajouter des index sur les colonnes fréquemment interrogées.
+— Limiter les jointures imbriquées et les N+1 queries.
+— Utiliser un système de cache simple si pertinent (ex. : mise en cache des résultats de
+recherche fréquents).
+d) Sécurité minimale requise :
+— Protection contre les injections SQL (requêtes paramétrées).
+— Hashage des mots de passe (bcrypt ou argon2).
+— Authentification par session ou JWT selon la stack choisie.
+— Vérification des droits avant toute action sensible.
+e) Architecture sobre :
+— Pas de dépendances inutiles dans package.json / requirements.txt.
+— Routes clairement séparées (utilisateurs, entité métier, auth).
+— Gestion explicite des erreurs (codes HTTP appropriés).
+Concepts Clés Green IT
+Indicateurs Green IT à surveiller pour le back-end :
+— Temps de réponse API : < 200 ms pour les opérations CRUD simples.
+— Nombre de dépendances : minimiser — chaque paquet a un coût.
+— Taille du bundle déployé : ne pas inclure les devDependencies en production.
+— Nombre de requêtes BDD par page : viser < 5 requêtes par vue.
+3
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Étape 4.3 — Déploiement du site web
+Approche Recommandée
+Objectif : Rendre le site accessible en ligne via un hébergement gratuit et sobre. Le déploiement
+doit être documenté et reproductible.
+Plateformes recommandées :
+— Vercel (https://vercel.com) — idéal pour les projets Node.js, Next.js, React, Vue.
+— Render (https://render.com) — supporte Python, Node, bases de données PostgreSQL
+gratuites.
+— Railway (https://railway.app) — adapté aux projets full-stack avec base de données.
+— GitHub Pages — pour les projets purement statiques.
+— Fly.io — pour des conteneurs Docker légers.
+Ressource vidéo utile :
+— Déploiement Vercel : https://www.youtube.com/watch?v=2yXb5lhGaC4
+Consignes
+Consignes de déploiement :
+a) Le site doit être accessible via une URL publique fonctionnelle au moment de la présentation.
+b) Le fichier README.md doit contenir l’URL de déploiement.
+c) Les variables d’environnement sensibles (mots de passe BDD, clés API) ne doivent jamais
+apparaître dans le dépôt Git (utiliser .env listé dans .gitignore).
+d) Le déploiement doit être automatisé depuis la branche main (CI/CD simple via GitHub
+Actions ou la plateforme choisie).
+Phase 5 — Analyse de l’empreinte carbone
+Étape 5.1 — Outils de mesure
+Détails Techniques
+Outils imposés (au moins 2 doivent être utilisés) :
+— Website Carbon Calculator : https://www.websitecarbon.com
+Estimation de l’empreinte CO2 par visite de page.
+— EcoIndex (https://www.ecoindex.fr)
+Note de A (excellent) à G (mauvais). Basé sur le poids, le nombre de requêtes et la com-
+plexité DOM.
+— Google Lighthouse (intégré aux DevTools Chrome)
+Scores Performance, Accessibilité, Bonnes pratiques, SEO.
+— GreenIT Analysis (extension navigateur)
+Analyse détaillée côté navigateur : consommation, DOM, requêtes.
+— PageSpeed Insights : https://pagespeed.web.dev
+Métriques Core Web Vitals en conditions réelles et laboratoire.
+4
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Outils complémentaires (valorisés) :
+— WebPageTest (https://www.webpagetest.org) — analyse waterfall des ressources char-
+gées.
+— Bundlephobia (https://bundlephobia.com) — poids des dépendances npm.
+— Carbon Footprint API ou The Green Web Foundation — vérification de l’hébergement
+vert.
+Étape 5.2 — Protocole d’analyse
+Consignes
+Votre analyse doit suivre le protocole suivant et être consignée dans le rapport :
+1. Mesure initiale (avant optimisations)
+Relever pour chaque page principale :
+— poids total de la page (Ko),
+— nombre de requêtes HTTP,
+— score EcoIndex (A à G) et note numérique,
+— empreinte CO2 estimée par visite (Website Carbon),
+— score Lighthouse Performance,
+— métriques : FCP, LCP, TBT, CLS.
+2. Identification des sources de pollution numérique
+Lister les éléments identifiés comme consommateurs :
+— images non compressées,
+— scripts inutilisés,
+— polices lourdes,
+— requêtes redondantes,
+— dépendances surdimensionnées.
+3. Mise en œuvre des optimisations
+Appliquer au moins 3 optimisations concrètes et les documenter.
+4. Mesure finale (après optimisations)
+Répéter les mesures de l’étape 1 et consigner les résultats.
+5. Comparaison et interprétation
+Présenter un tableau avant/après. Calculer les gains obtenus. Comparer avec un site concur-
+rent ou de référence du même type.
+Concepts Clés Green IT
+Tableau de comparaison avant / après à produire (exemple) :
+5
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Indicateur
+Avant
+Après
+Gain
+Poids de la page d’accueil
+... Ko
+... Ko
+...%
+Nombre de requêtes HTTP
+...
+...
+...
+Score EcoIndex
+.../100
+.../100
+... pts
+Note EcoIndex
+... (A–G)
+... (A–G)
+CO2 / visite
+... g
+... g
+...%
+Score Lighthouse Perf.
+.../100
+.../100
+... pts
+FCP
+... s
+... s
+...%
+LCP
+... s
+... s
+...%
+Phase 6 — Tests et validation
+Approche Recommandée
+Objectif : Garantir que le site fonctionne correctement, est performant et respecte ses engage-
+ments en matière de sobriété. Les tests constituent une preuve de qualité, pas une formalité.
+Étape 6.1 — Tests fonctionnels
+Consignes
+Valider l’ensemble des fonctionnalités via des scénarios de test documentés.
+Scénario
+Résultat attendu
+Statut
+Créer un utilisateur va-
+lide
+Utilisateur enregistré en BDD, redirection
+❑
+Créer
+un
+utilisateur
+(email vide)
+Message d’erreur côté serveur
+❑
+Modifier un utilisateur
+existant
+Données mises à jour en BDD
+❑
+Supprimer un utilisateur
+Utilisateur supprimé après confirmation
+❑
+Lister les utilisateurs
+Affichage paginé correct
+❑
+Créer une entité métier
+Entité enregistrée, liste mise à jour
+❑
+Connexion avec identi-
+fiants valides
+Redirection vers espace personnel
+❑
+Connexion avec mauvais
+MDP
+Message d’erreur, pas de session créée
+❑
+Accès page protégée sans
+connexion
+Redirection vers la page de connexion
+❑
+Rempli le tableau dans votre rapport : ✓= OK, ✗= KO, ❑= non testé.
+6
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Étape 6.2 — Tests de performance
+Consignes
+a) Exécuter Google Lighthouse sur les 3 pages principales et joindre les captures d’écran dans
+le rapport.
+b) Vérifier les Core Web Vitals via PageSpeed Insights.
+c) Tester le site sur un réseau simulé 3G lent (DevTools > Network > Throttling) et observer
+l’expérience utilisateur.
+d) Analyser le waterfall de chargement avec WebPageTest et identifier les ressources blo-
+quantes.
+Étape 6.3 — Tests de sécurité minimaux
+.
+Important
+Ces vérifications sont obligatoires avant la présentation :
+— Aucun mot de passe en clair dans la base de données (vérifier avec un SELECT direct).
+— Aucune variable sensible dans le dépôt GitHub (git log –all | grep -i password).
+— Les formulaires rejettent les entrées malformées (test avec ’; DROP TABLE–).
+— Un utilisateur non connecté ne peut pas accéder aux pages protégées en modifiant l’URL
+directement.
+Phase 7 — Livrables finaux et documentation
+Étape 7.1 — Contenu du dépôt GitHub
+¥
+Livrables attendus
+Le dépôt GitHub doit impérativement contenir, au moment de la remise :
+1. Fichier README.md complet, comprenant :
+— Nom du projet et description en 3–5 lignes.
+— URL du site déployé (lien cliquable).
+— Membres de l’équipe et rôles respectifs.
+— Stack technique utilisée avec justification Green IT.
+— Instructions pour cloner, installer et lancer le projet localement.
+— Structure du dépôt (arborescence commentée).
+— Conventions de commit adoptées.
+— Lien vers le rapport PDF.
+2. Code source complet :
+— Front-end (HTML, CSS, JS) dans un dossier /frontend ou /public.
+— Back-end dans un dossier /backend ou /server.
+— Scripts de migration / initialisation de la base de données.
+— Fichier .env.example (jamais le vrai .env).
+7
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+3. Historique Git propre :
+— Au minimum 3 branches actives avec des PR fusionnées.
+— Messages de commits lisibles et descriptifs.
+— Contributions visibles de chaque membre de l’équipe.
+— Utilisation des GitHub Issues pour le suivi des tâches.
+4. Dossier /docs ou /conception :
+— Diagrammes UML (cas d’utilisation, classes, séquence).
+— Wireframes ou maquettes des pages principales.
+— Captures d’écran des rapports EcoIndex / Lighthouse avant et après optimisations.
+5. Rapport PDF joint au dépôt (dans /docs).
+Étape 7.2 — Structure du rapport PDF
+Consignes
+Le rapport doit être clair, structuré et illustré. Il ne doit pas dépasser 25 pages hors annexes. Il
+doit contenir les sections suivantes :
+Section 1. Présentation du projet
+Rappel de la proposition de valeur, du périmètre MVP, des utilisateurs cibles et des
+contraintes Green IT retenues.
+Section 2. Architecture et conception
+Diagrammes UML, schéma de la base de données, architecture générale (front / back
+/ BDD / déploiement).
+Section 3. Choix technologiques justifiés
+Tableau récapitulatif des technologies choisies avec justification Green IT pour
+chaque choix.
+Section 4. Implémentation
+Description des fonctionnalités développées. Extraits de code commentés pour les
+parties les plus significatives (CRUD, requêtes BDD, optimisations).
+Section 5. Analyse de l’empreinte carbone
+Résultats des mesures (tableau avant/après), captures d’écran des outils, optimisa-
+tions appliquées et gains obtenus.
+Section 6. Tests et validation
+Tableau des scénarios de tests fonctionnels, résultats Lighthouse, captures d’écran.
+Section 7. Organisation de l’équipe et collaboration
+Répartition des tâches, capture du tableau GitHub Projects, résumé des contributions
+de chaque membre.
+Section 8. Discussion et conclusion
+Défis rencontrés, compromis entre fonctionnalités et sobriété, pistes d’amélioration,
+regard critique sur les décisions prises.
+Section 9. Annexes
+Captures d’écran complètes, backlog final, tout élément complémentaire utile.
+8
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Phase 8 — Présentation finale
+Déroulement et format
+Approche Recommandée
+Partie
+Contenu attendu
+Durée
+Introduction
+Présentation de l’équipe, du projet et de la pro-
+position de valeur
+2 min
+Conception
+Rappel des diagrammes UML, wireframes, ar-
+chitecture retenue
+3 min
+Démo en live
+Navigation sur le site déployé — CRUD utilisa-
+teurs, entité métier, interface
+5 min
+Analyse carbone
+Résultats des outils, tableau avant/après, opti-
+misations réalisées
+3 min
+Bilan
+Choix techniques justifiés, difficultés, réflexion
+Green IT
+2 min
+Questions
+Réponses aux questions de l’enseignant et/ou
+du jury
+5 min
+Total
+20 min
+.
+Important
+Consignes pour la présentation :
+— Tous les membres de l’équipe doivent prendre la parole.
+— La démo doit être réalisée sur le site déployé (pas en local).
+— Prévoir un plan de secours (captures d’écran) en cas de problème réseau.
+— Chaque membre doit être capable d’expliquer les choix techniques de l’ensemble du
+projet, pas uniquement sa partie.
+— Le support de présentation doit lui-même être sobre : pas de vidéos HD en fond, pas
+d’animations inutiles.
+Phase — Grille d’évaluation complète du projet
+.
+Important
+Important — Différenciation des notes : Les membres d’un même groupe peuvent recevoir
+des notes différentes, en fonction de leur degré d’implication, de leur maîtrise technique et de
+leurs contributions traçables sur GitHub. L’enseignant se réserve le droit de poser des questions
+individuelles lors de la présentation pour évaluer la compréhension personnelle de chaque
+étudiant.
+9
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Vue d’ensemble des critères
+Critère 1 — Conception & Architecture Barème : /4 pts
+Sous-critère
+Points
+Attendus
+Diagramme de cas d’utilisation
+/1
+Acteurs identifiés, cas d’utilisation cohérents
+avec le MVP, relations d’inclusion/extension
+si pertinentes.
+Diagramme de classes / MLD
+/1
+Entités correctement modélisées, cardinali-
+tés, clés primaires et étrangères explicites, au
+moins 2 entités (User + entité métier).
+Diagramme de séquence
+/1
+Un scénario complet et pertinent (ex. :
+connexion, création d’une entité), fragments
+UML corrects.
+Cohérence conception →
+implémentation
+/1
+Les diagrammes correspondent à ce qui a
+été réellement développé. Aucun déphasage
+entre conception et code.
+Barème indicatif :
+4/4 Conception complète, cohérente, détaillée et fidèle à l’implémentation.
+3/4 Un diagramme manquant ou incomplet; cohérence globale maintenue.
+2/4 Deux éléments manquants ou conception peu fidèle au code.
+1/4 Seuls les wireframes présents; diagrammes absents ou incohérents.
+0/4 Aucun livrable de conception.
+Critère 2 — Implémentation front-end Barème : /5 pts
+Sous-critère
+Points
+Attendus
+Fonctionnalité et navigabilité
+/1
+Toutes les pages fonctionnent, navigation
+fluide, aucune page cassée, formulaires opé-
+rationnels.
+Sobriété visuelle et ergonomie
+/1
+Interface claire, hiérarchie visuelle lisible,
+pas d’éléments décoratifs inutiles, respon-
+sive si pertinent.
+Optimisation des ressources
+/1
+Images compressées, CSS/JS minifiés, lazy
+loading implémenté, polices légères ou sys-
+tème.
+Poids et performance mesurés
+/1
+Score Lighthouse Performance > 70, poids
+< 500 Ko par page, captures d’écran jointes
+dans le rapport.
+Accessibilité de base
+/1
+Balises
+sémantiques,
+attributs
+alt,
+contrastes suffisants (≥4,5 :1), structure de
+headings logique.
+Barème indicatif :
+10
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+5/5 Interface soignée, sobre, rapide, accessible; toutes les optimisations démontrées.
+4/5 Un sous-critère insuffisant (ex. : accessibilité incomplète ou Lighthouse non joint).
+3/5 Deux sous-critères insuffisants; le site reste utilisable.
+2/5 Site fonctionnel mais non optimisé, lourd, sans mesure de performance.
+1/5 Interface très basique, non sobre, aucune optimisation.
+0/5 Front-end absent ou non fonctionnel.
+Critère 3 — Implémentation back-end & base de données Barème : /6 pts
+Sous-critère
+Points
+Attendus
+CRUD utilisateurs complet
+/1,5
+Création, lecture (liste paginée), modifica-
+tion et suppression fonctionnels. Validation
+côté serveur présente.
+CRUD entité métier complet
+/1,5
+Même niveau d’exigence que pour les utili-
+sateurs. Liaison logique avec la thématique
+Green du projet.
+Authentification et sécurité
+/1
+Hashage des mots de passe, sessions ou JWT,
+routes protégées, aucune donnée sensible
+exposée.
+Qualité et optimisation du code
+back-end
+/1
+Routes organisées, gestion des erreurs
+(codes HTTP), requêtes paramétrées, pas de
+SELECT * systématique.
+Sobriété des dépendances
+/1
+Nombre de dépendances justifié et minimal.
+Aucune bibliothèque superflue. Stack cohé-
+rente avec le besoin réel.
+Barème indicatif :
+6/6 Deux CRUD complets et sécurisés, code propre, dépendances sobres, sécurité démontrée.
+4–5/6 CRUD fonctionnels mais sécurité incomplète ou code peu structuré.
+2–3/6 Un seul CRUD complet ou problèmes de sécurité significatifs.
+1/6 Accès BDD présent mais très partiel (lecture seule ou formulaires non fonctionnels).
+0/6 Pas de base de données ou pas de back-end.
+11
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Critère 4 — Analyse de l’empreinte carbone Barème : /4 pts
+Sous-critère
+Points
+Attendus
+Mesures réalisées avec outils
+appropriés
+/1
+Au minimum 2 outils utilisés, captures
+d’écran jointes, pages analysées clairement
+identifiées.
+Tableau avant/après avec gains
+calculés
+/1
+Tableau complet avec toutes les métriques,
+gains exprimés en pourcentage, commen-
+taires interprétatifs.
+Identification des sources de
+pollution
+/1
+Analyse pertinente des éléments respon-
+sables de la consommation. Priorités d’opti-
+misation identifiées.
+Optimisations appliquées et
+justifiées
+/1
+Au moins 3 optimisations concrètes décrites,
+implémentées et mesurées. Résultats inter-
+prétés avec esprit critique.
+Barème indicatif :
+4/4 Analyse rigoureuse, outillée, comparative, optimisations mesurées et interprétées.
+3/4 Analyse présente, tableau incomplet ou optimisations non mesurées.
+2/4 Mesures réalisées mais sans comparaison avant/après ni optimisation documentée.
+1/4 Une seule capture d’écran d’outil sans analyse.
+0/4 Aucune analyse de l’empreinte carbone.
+Critère 5 — Tests & Qualité Barème : /3 pts
+Sous-critère
+Points
+Attendus
+Tests fonctionnels documentés
+/1
+Tableau de scénarios rempli (au moins 8 scé-
+narios), résultats OK/KO consignés dans le
+rapport.
+Tests de performance
+(Lighthouse / PageSpeed)
+/1
+Scores obtenus, captures d’écran pour 3
+pages, métriques Core Web Vitals relevées
+et commentées.
+Vérifications de sécurité
+minimales
+/1
+Les 4 vérifications de sécurité (cf. Étape 6.3)
+démontrées et consignées. Aucune variable
+sensible dans le dépôt.
+Barème indicatif :
+3/3 Tests documentés, Lighthouse joint, sécurité entièrement vérifiée.
+2/3 Tests partiels ou sécurité non démontrée.
+1/3 Un seul type de test réalisé.
+0/3 Aucun test documenté.
+12
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Critère 6 — Collaboration & Organisation GitHub Barème : /3 pts
+Sous-critère
+Points
+Attendus
+Qualité du dépôt et du
+README.md
+/1
+README complet (URL déployée, instruc-
+tions, membres, stack), dépôt bien structuré,
+.gitignore présent et correctement confi-
+guré.
+Historique Git et workflow de
+branches
+/1
+Branches fonctionnelles actives, PR fusion-
+nées, messages de commits descriptifs,
+contributions visibles de chaque membre.
+Traçabilité et suivi des tâches
+/1
+GitHub Issues utilisées, labels et assignees
+configurés, GitHub Projects ou backlog vi-
+sible et à jour.
+Barème indicatif :
+3/3 Dépôt exemplaire, historique riche, contributions équilibrées de tous les membres.
+2/3 Dépôt bien organisé mais suivi des tâches insuffisant ou contributions déséquilibrées.
+1/3 README minimal, tout sur main, pas d’Issues ni de PR.
+0/3 Dépôt vide, désorganisé ou non partagé avec l’enseignant.
+⋆
+Bonus — Meilleur projet Green + 2 pts
+Le groupe dont le projet obtient les meilleurs résultats globaux se voit attribuer 2 points bo-
+nus. L’attribution du bonus est décidée collégialement par l’enseignant à l’issue de toutes les
+présentations, en tenant compte des dimensions suivantes :
+Dimension évaluée
+Niveau attendu
+Meilleur score EcoIndex (A ou B)
+A ou B
+Poids de page le plus faible (< 100 Ko)
+Excellent
+Site le plus fonctionnel et complet
+Exemplaire
+Démarche Green IT la plus rigoureuse et documentée
+Irréprochable
+Présentation la plus claire et convaincante
+Très convaincant
+Originalité et pertinence du projet
+Remarquable
+En cas d’ex-æquo, le bonus est attribué au projet dont l’empreinte carbone par visite est la plus
+faible selon Website Carbon Calculator.
+13
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Fiche de notation individuelle
+N°
+Critère
+Barème
+Note obtenue
+Observations
+1
+Conception & Architecture
+/4
+. . . . . . . . . . . . . . . . /4
+2
+Implémentation front-end
+/5
+. . . . . . . . . . . . . . . . /5
+3
+Implémentation back-end &
+BDD
+/6
+. . . . . . . . . . . . . . . . /6
+4
+Analyse empreinte carbone
+/4
+. . . . . . . . . . . . . . . . /4
+5
+Tests & Qualité
+/3
+. . . . . . . . . . . . . . . . /3
+6
+Collaboration & GitHub
+/3
+. . . . . . . . . . . . . . . . /3
+Sous-total
+/25
+.............../25
+Bonus — Meilleur projet
++2
+..................
+NOTE FINALE
+/25
+.............../25
+Correspondance notes / appréciations
+Fourchette
+Mention
+Appréciation
+Description
+22 – 25 pts
+A
+Excellent
+Projet exemplaire, démarche Green IT irrépro-
+chable, code propre, analyse complète, présen-
+tation convaincante.
+18 – 21 pts
+B
+Très bien
+Projet complet et fonctionnel, démarche Green
+IT présente, quelques lacunes mineures.
+13 – 17 pts
+C
+Satisfaisant
+Projet fonctionnel mais optimisations insuffi-
+santes ou analyse carbone incomplète.
+8 – 12 pts
+D
+Insuffisant
+Projet incomplet, non déployé ou dépôt mal
+structuré. Démarche Green IT absente.
+< 8 pts
+E
+Non conforme
+Livrables majeurs manquants, site non fonc-
+tionnel ou plagiat constaté.
+14
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Ressources recommandées
+Concepts Clés Green IT
+
+Éco-conception web :
+— Référentiel GR491 — Green IT : https://gr491.isit-europe.org
+— Checklist
+éco-conception
+web
+:
+https://www.eco-conception-web.com/
+conseils-pro-eco-conception-web/
+— Collectif Green IT : https://www.greenit.fr
+¡
+Outils de mesure de l’empreinte carbone :
+— Website Carbon Calculator : https://www.websitecarbon.com
+— EcoIndex : https://www.ecoindex.fr
+— Google Lighthouse : intégré aux DevTools Chrome (F12 > Lighthouse)
+— PageSpeed Insights : https://pagespeed.web.dev
+— GreenIT Analysis : extension navigateur Chrome/Firefox
+— WebPageTest : https://www.webpagetest.org
+— Bundlephobia (poids des dépendances npm) : https://bundlephobia.com
+— The
+Green
+Web
+Foundation
+(hébergement
+vert)
+:
+https://www.
+thegreenwebfoundation.org
+ë
+Optimisation des ressources :
+— Compression d’images : https://squoosh.app et https://tinypng.com
+— Minification CSS/JS : https://cssnano.co et https://terser.org
+— Vérificateur
+de
+contraste
+accessibilité
+:
+https://webaim.org/resources/
+contrastchecker/
+— Générateur .gitignore : https://gitignore.io
+Ç
+Plateformes de déploiement :
+— Vercel : https://vercel.com
+— Render : https://render.com
+— Railway : https://railway.app
+— Fly.io : https://fly.io
+— GitHub Pages (statique) : https://pages.github.com
+Å
+Vidéo tutoriel :
+— Déploiement full-stack : https://www.youtube.com/watch?v=2yXb5lhGaC4
+Récapitulatif des livrables de la Partie 2
+¥
+Livrables attendus
+Le tableau ci-dessous synthétise l’ensemble des livrables attendus à l’issue de cette seconde
+partie. Chaque livrable doit être accessible via le dépôt GitHub ou lors de la présentation finale.
+15
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+#
+Livrable
+Format
+Emplacement
+Statut
+1
+Code source front-end complet
+.html / .css /
+.js
+GitHub
+/frontend
+Obligatoire
+2
+Code source back-end complet
+Fichiers serveur
+GitHub
+/backend
+Obligatoire
+3
+Scripts base de données
+.sql ou
+migration
+GitHub
+/database
+Obligatoire
+4
+Fichier README.md
+Markdown
+GitHub
+(racine)
+Obligatoire
+5
+Site déployé en ligne
+URL publique
+README +
+démo
+Obligatoire
+6
+Rapport PDF (max. 25 p.)
+PDF
+GitHub /docs
+Obligatoire
+7
+Diagrammes UML (UC, classes,
+séquence)
+PNG / SVG /
+PDF
+GitHub /docs
+Obligatoire
+8
+Wireframes / maquettes
+PNG / PDF
+GitHub /docs
+Obligatoire
+9
+Captures
+EcoIndex
+/
+Ligh-
+thouse avant/après
+PNG
+/docs +
+rapport
+Obligatoire
+10
+Tableau de tests fonctionnels
+rempli
+Dans le rapport
+Rapport PDF
+Obligatoire
+11
+Historique Git avec branches et
+PR
+GitHub
+Dépôt GitHub
+Obligatoire
+12
+GitHub Issues / Projects à jour
+GitHub
+Dépôt GitHub
+Recommandé
+13
+Pipeline CI/CD (GitHub Ac-
+tions)
+YAML
+GitHub
+/.github
+Optionnel
+14
+Support
+de
+présentation
+(slides)
+PDF / PPTX
+Présenté en
+séance
+Obligatoire
+.
+Important
+¥
+Checklist avant remise — à vérifier impérativement :
+✓Le site est accessible via l’URL publique indiquée dans le README.md.
+✓Le dépôt a bien été partagé avec l’enseignant (identifiant GitHub communiqué en cours).
+✓Aucune variable sensible (mot de passe, clé API, token) n’est présente dans le code versionné.
+✓Le rapport PDF est présent dans /docs et lisible sans mot de passe.
+✓Tous les membres de l’équipe ont contribué (commits visibles sur GitHub pour chacun).
+✓Le tableau avant/après de l’empreinte carbone est entièrement complété.
+✓Les captures d’écran Lighthouse sont jointes dans le rapport pour au moins 3 pages.
+✓La base de données est initialisée (script SQL ou fichier de migration fourni et fonctionnel).
+16
+
+---
+Mini-Projet Numérique Durable — Partie 2
+TI616 – EFREI Paris – 2025-2026
+Conclusion
+Contexte
+Cette seconde partie marque le passage de la réflexion à la réalisation. Elle vous demande de
+produire un site web réel, sobre et fonctionnel, en assumant pleinement les choix documentés
+lors de la Partie 1.
+Un bon projet Green IT ne se résume pas à l’obtention d’un score EcoIndex élevé : c’est avant
+tout un projet dans lequel chaque décision technique est justifiée, chaque fonctionnalité est
+utile, et chaque ressource chargée est nécessaire.
+La qualité de votre démarche sera évaluée autant que le résultat final. Un projet simple, bien
+mené, rigoureusement documenté et honnêtement analysé vaut toujours plus qu’un projet
+ambitieux, surchargé et peu maîtrisé.
+« La perfection est atteinte non pas lorsqu’il n’y a plus rien à ajouter, mais lorsqu’il n’y a plus rien à
+retirer. »
+— Antoine de Saint-Exupéry
+Bonne réalisation à toutes les équipes.
+17
+
+---

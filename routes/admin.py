@@ -1,4 +1,4 @@
-# routes/admin.py - Panel admin pour gérer les utilisateurs
+# routes/admin.py - Panel admin pour gerer les utilisateurs
 
 import math
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
@@ -8,6 +8,8 @@ from utils import admin_requis
 
 admin_bp = Blueprint('admin', __name__)
 
+PAR_PAGE_ADMIN = 20
+
 
 @admin_bp.route('/admin')
 @admin_requis
@@ -16,19 +18,18 @@ def panel_admin():
     if page < 1:
         page = 1
 
-    par_page = 20
-    nb_users = compter_utilisateurs()
-    nb_pages = max(1, math.ceil(nb_users / par_page))
+    nb_total = compter_utilisateurs()
+    nb_pages = max(1, math.ceil(nb_total / PAR_PAGE_ADMIN))
 
     if page > nb_pages:
         page = nb_pages
 
-    users = lister_utilisateurs(page=page, par_page=par_page)
+    users = lister_utilisateurs(page=page, par_page=PAR_PAGE_ADMIN)
     stats = stats_globales()
 
     return render_template('admin.html',
                            utilisateurs=users,
-                           nb_utilisateurs=nb_users,
+                           nb_utilisateurs=nb_total,
                            stats_taches=stats,
                            page=page,
                            nb_pages=nb_pages)
@@ -37,7 +38,7 @@ def panel_admin():
 @admin_bp.route('/admin/utilisateurs/<int:user_id>/promouvoir', methods=['POST'])
 @admin_requis
 def promouvoir_admin(user_id):
-    # on ne peut pas se modifier soi-même ici (pas de sens)
+    # on ne peut pas se modifier soi-meme ici (pas de sens)
     if user_id == session['utilisateur_id']:
         flash('Vous ne pouvez pas modifier votre propre role.', 'erreur')
         return redirect(url_for('admin.panel_admin'))
@@ -62,7 +63,7 @@ def retrograder_user(user_id):
 @admin_bp.route('/admin/utilisateurs/<int:user_id>/supprimer', methods=['POST'])
 @admin_requis
 def supprimer_user(user_id):
-    # empêcher l'admin de se supprimer lui-même par erreur
+    # empecher l'admin de se supprimer lui-meme par erreur
     if user_id == session['utilisateur_id']:
         flash('Vous ne pouvez pas supprimer votre propre compte ici.', 'erreur')
         return redirect(url_for('admin.panel_admin'))
