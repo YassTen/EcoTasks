@@ -11,15 +11,13 @@ function confirmerSuppression() {
 (function () {
     var theme = localStorage.getItem('theme');
 
-    // Si pas de preference sauvegardee, on respecte la preference systeme
-    if (!theme) {
-        var prefereSombre = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        theme = prefereSombre ? 'sombre' : 'clair';
-    }
-
+    // Si l'utilisateur a explicitement choisi un theme, on l'applique
     if (theme === 'sombre') {
         document.documentElement.setAttribute('data-theme', 'sombre');
+    } else if (theme === 'clair') {
+        document.documentElement.setAttribute('data-theme', 'clair');
     }
+    // sinon on laisse le CSS gerer via prefers-color-scheme
 })();
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -35,15 +33,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 4000);
     }
 
-    // Toggle mode sombre
+    // Toggle mode sombre via le bouton
     var btnTheme = document.getElementById('btn-theme');
     if (btnTheme) {
         btnTheme.addEventListener('click', function () {
             var html = document.documentElement;
-            var estSombre = html.getAttribute('data-theme') === 'sombre';
+            var actuel = html.getAttribute('data-theme');
+
+            // Determiner le theme visible actuellement
+            var estSombre = actuel === 'sombre' ||
+                (actuel !== 'clair' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
             if (estSombre) {
-                html.removeAttribute('data-theme');
+                html.setAttribute('data-theme', 'clair');
                 localStorage.setItem('theme', 'clair');
             } else {
                 html.setAttribute('data-theme', 'sombre');

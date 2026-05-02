@@ -961,11 +961,41 @@ footer {
     }
 }
 
-/* === Mode sombre (automatique selon les preferences systeme) ===
-   Reduit la consommation d'energie sur ecrans OLED.
-   Pas de bouton toggle = pas de JS supplementaire = sobriete. */
+/* === Bouton toggle theme === */
+.btn-theme {
+    background: none;
+    border: 1px solid var(--bordure);
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: border-color 0.15s;
+    flex-shrink: 0;
+}
+
+.btn-theme:hover {
+    border-color: var(--primaire);
+}
+
+/* Icone soleil par defaut (mode clair) */
+.icone-theme::before {
+    content: '\2600'; /* ☀ */
+    font-size: 1rem;
+}
+
+/* === Mode sombre ===
+   Deux declencheurs possibles :
+   1. prefers-color-scheme: dark -> automatique selon l'OS
+   2. data-theme="sombre" -> toggle manuel via le bouton
+   Reduit la consommation d'energie sur ecrans OLED. */
+
+/* Variables sombres partagees entre les deux modes */
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="clair"]) {
         --primaire: #52b788;
         --primaire-claire: #74c69d;
         --primaire-tres-claire: #1a2e25;
@@ -981,37 +1011,53 @@ footer {
         --succes-fond: #1a2e25;
         --ombre: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
+}
 
-    /* Le hero a un gradient en dur, il faut le redefinir */
-    .hero {
+/* Toggle manuel : forcer le sombre meme si l'OS est en clair */
+:root[data-theme="sombre"] {
+    --primaire: #52b788;
+    --primaire-claire: #74c69d;
+    --primaire-tres-claire: #1a2e25;
+    --primaire-foncee: #95d5b2;
+    --fond: #121212;
+    --surface: #1e1e1e;
+    --texte: #e0e0e0;
+    --texte-secondaire: #a0a0a0;
+    --bordure: #333333;
+    --erreur: #ef5350;
+    --erreur-fond: #2c1a1a;
+    --succes: #52b788;
+    --succes-fond: #1a2e25;
+    --ombre: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Styles specifiques en mode sombre (media OU data-theme) */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="clair"]) .hero {
         background: linear-gradient(180deg, var(--primaire-tres-claire) 0%, var(--fond) 100%);
     }
-
-    /* Les inputs ont un fond explicite */
-    .champ input,
-    .champ select,
-    .champ textarea {
+    :root:not([data-theme="clair"]) .champ input,
+    :root:not([data-theme="clair"]) .champ select,
+    :root:not([data-theme="clair"]) .champ textarea {
         background: #2a2a2a;
         color: var(--texte);
         border-color: var(--bordure);
     }
-
-    .champ input::placeholder {
-        color: #666;
-    }
-
-    /* Le tableau admin en dark */
-    .tableau th {
-        background: #1a1a1a;
-    }
-
-    /* Les boutons restent lisibles */
-    .nav-liens .btn-principal,
-    .btn-principal {
-        color: #fff;
-    }
-
-    .btn-deconnexion {
-        color: var(--erreur) !important;
-    }
+    :root:not([data-theme="clair"]) .champ input::placeholder { color: #666; }
+    :root:not([data-theme="clair"]) .tableau th { background: #1a1a1a; }
+    :root:not([data-theme="clair"]) .icone-theme::before { content: '\263D'; /* ☽ */ }
 }
+
+:root[data-theme="sombre"] .hero {
+    background: linear-gradient(180deg, var(--primaire-tres-claire) 0%, var(--fond) 100%);
+}
+:root[data-theme="sombre"] .champ input,
+:root[data-theme="sombre"] .champ select,
+:root[data-theme="sombre"] .champ textarea {
+    background: #2a2a2a;
+    color: var(--texte);
+    border-color: var(--bordure);
+}
+:root[data-theme="sombre"] .champ input::placeholder { color: #666; }
+:root[data-theme="sombre"] .tableau th { background: #1a1a1a; }
+:root[data-theme="sombre"] .icone-theme::before { content: '\263D'; /* ☽ */ }
