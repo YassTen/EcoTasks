@@ -15,9 +15,10 @@ Un site sobre ou les utilisateurs creent et suivent des actions ecologiques au q
 | Membre | Role |
 |---|---|
 | Yassine Tenzekhti | Developpement back-end, authentification, deploiement |
-| [A COMPLETER] | [Role] |
-| [A COMPLETER] | [Role] |
-| [A COMPLETER] | [Role] |
+| El Assad SAID | Documentation, analyse Green IT |
+| Kelvish DUVAL | Front-end, UX |
+| Theotim DJELASSI-DOUBLET | Back-end secondaire |
+| Lucas RINAUDO | Sécurité |
 
 Coordinateur du module : Yvan GUIFO
 
